@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongo:
     image: mongo:4.4
@@ -40,11 +38,10 @@ services:
       - ./backend:/usr/src/app  # فقط فایل‌های ضروری را mount کنید
       - /usr/src/app/node_modules
     environment:
-      - MONGO_URI=mongodb://mongo:27017/your_db_name
+      - MONGO_URI=mongodb://mongo:27017/tamini
       - PORT=3001
     depends_on:
-      - mongo
-    restart: always
+      - mongo 
     networks:
       - mynetwork
 
