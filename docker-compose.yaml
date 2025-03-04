@@ -69,9 +69,9 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -r /e/projects/Tamini/back $SSH_USER@$SSH_HOST:/home/digital/
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -r /e/projects/Tamini/back $SSH_USER@$SSH_HOST:/root/digital/
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-          cd /home/digital/back
+          cd /root/digital/back
           docker build -t backend-app .
           docker stop backend-app || true
           docker rm backend-app || true
@@ -87,9 +87,9 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -r /e/projects/Tamini/front $SSH_USER@$SSH_HOST:/home/digital/
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-          cd /home/digital/front
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -r /e/projects/Tamini/front $SSH_USER@$SSH_HOST:/root/digital/
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking-no $SSH_USER@$SSH_HOST << 'EOF'
+          cd /root/digital/front
           docker build -t frontend-app .
           docker stop frontend-app || true
           docker rm frontend-app || true
