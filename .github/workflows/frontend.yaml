@@ -1,4 +1,4 @@
-name: Backend CI/CD
+name: Frontend CI/CD
 
 on:
   push:
@@ -19,16 +19,16 @@ jobs:
         node-version: '14'
 
     - name: Install dependencies
-      working-directory: ./backend
+      working-directory: ./frontend
       run: npm install
 
     - name: Run tests
-      working-directory: ./backend
+      working-directory: ./frontend
       run: npm test
 
     - name: Build Docker image
-      working-directory: ./backend
-      run: docker build -t backend-app .
+      working-directory: ./frontend
+      run: docker build -t frontend-app .
 
     - name: Push Docker image
       env:
@@ -36,8 +36,8 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-        docker tag backend-app $DOCKER_USERNAME/backend-app:latest
-        docker push $DOCKER_USERNAME/backend-app:latest
+        docker tag frontend-app $DOCKER_USERNAME/frontend-app:latest
+        docker push $DOCKER_USERNAME/frontend-app:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,8 +54,8 @@ jobs:
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-          docker pull $DOCKER_USERNAME/backend-app:latest
-          docker stop backend-app || true
-          docker rm backend-app || true
-          docker run -d -p 3001:3001 --name backend-app $DOCKER_USERNAME/backend-app:latest
+          docker pull $DOCKER_USERNAME/frontend-app:latest
+          docker stop frontend-app || true
+          docker rm frontend-app || true
+          docker run -d -p 3000:3000 --name frontend-app $DOCKER_USERNAME/frontend-app:latest
         EOF
