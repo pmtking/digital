@@ -19,15 +19,15 @@ jobs:
         node-version: '14'
 
     - name: Install dependencies
-      working-directory: ./frontend
+      working-directory: /e/projects/Tamini/front
       run: npm install
 
     - name: Run tests
-      working-directory: ./frontend
+      working-directory: /e/projects/Tamini/front
       run: npm test
 
     - name: Build Docker image
-      working-directory: ./frontend
+      working-directory: /e/projects/Tamini/front
       run: docker build -t frontend-app .
 
     - name: Push Docker image
