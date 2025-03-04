@@ -19,15 +19,15 @@ jobs:
         node-version: '14'
 
     - name: Install dependencies
-      working-directory: ./frontend
+      working-directory: ./frontend  # مسیر را به مسیر صحیح تغییر دهید
       run: npm install
 
     - name: Run tests
-      working-directory: ./frontend
+      working-directory: ./frontend  # مسیر را به مسیر صحیح تغییر دهید
       run: npm test
 
     - name: Build Docker image
-      working-directory: ./frontend
+      working-directory: ./frontend  # مسیر را به مسیر صحیح تغییر دهید
       run: docker build -t frontend-app .
 
     - name: Push Docker image
