@@ -19,15 +19,15 @@ jobs:
         node-version: '14'
 
     - name: Install dependencies for Backend
-      working-directory: ./back
+      working-directory: /e/projects/Tamini/back
       run: npm install
 
     - name: Run tests for Backend
-      working-directory: ./back
+      working-directory: /e/projects/Tamini/back
       run: npm test
 
     - name: Build Docker image for Backend
-      working-directory: ./back
+      working-directory: /e/projects/Tamini/back
       run: docker build -t backend-app .
 
   build-and-test-frontend:
@@ -44,15 +44,15 @@ jobs:
         node-version: '14'
 
     - name: Install dependencies for Frontend
-      working-directory: ./front
+      working-directory: /e/projects/Tamini/front
       run: npm install
 
     - name: Run tests for Frontend
-      working-directory: ./front
+      working-directory: /e/projects/Tamini/front
       run: npm test
 
     - name: Build Docker image for Frontend
-      working-directory: ./front
+      working-directory: /e/projects/Tamini/front
       run: docker build -t frontend-app .
 
   deploy:
@@ -60,9 +60,6 @@ jobs:
     needs: [build-and-test-backend, build-and-test-frontend]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Deploy Backend to server
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -72,9 +69,9 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ./back Dockerfile $SSH_USER@$SSH_HOST:/home/digital
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -r /e/projects/Tamini/back $SSH_USER@$SSH_HOST:/home/digital/
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-          cd /home/digital
+          cd /home/digital/back
           docker build -t backend-app .
           docker stop backend-app || true
           docker rm backend-app || true
@@ -90,9 +87,9 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ./front Dockerfile $SSH_USER@$SSH_HOST:/home/digital
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -r /e/projects/Tamini/front $SSH_USER@$SSH_HOST:/home/digital/
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-          cd /home/digital
+          cd /home/digital/front
           docker build -t frontend-app .
           docker stop frontend-app || true
           docker rm frontend-app || true
